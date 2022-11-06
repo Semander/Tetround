@@ -13,6 +13,9 @@ public class BoardC : MonoBehaviour
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
 
+    public int[] pieceWaves = new int[] { 0, 22, 0, 0, 0, 0, 22, 22, 6, 6 };
+    public int nextPiece;
+
     public RectInt Bounds
     {
         get
@@ -40,20 +43,30 @@ public class BoardC : MonoBehaviour
 
     public void SpawnPiece()
     {
-        int random = Random.Range(0, 34);
+        int pieceNumber = Random.Range(0, 34);
+
+
+        if (nextPiece >= pieceWaves.Length) { 
+            nextPiece = 0;
+            GameOver(); 
+        } 
+
+        pieceNumber = pieceWaves[nextPiece];
+        nextPiece++;
+
         int shape;
         int variant;
 
-        if (random < 10) // O,T,I,V,Y blocks have 2 rotations
+        if (pieceNumber < 10) // O,T,I,V,Y blocks have 2 rotations
         {
-            shape = random / 2;
-            variant = random % 2;
+            shape = pieceNumber / 2;
+            variant = pieceNumber % 2;
         }
         else // Z,L,S,J,R,P blocks have 2 rotations and 2 mirror variants
         {
-            random -= 10; // Getting rid of first 10 indexes (5 shapes with 2 rot)
-            shape = 5 + random / 4;
-            variant = random % 4;
+            pieceNumber -= 10; // Getting rid of first 10 indexes (5 shapes with 2 rot)
+            shape = 5 + pieceNumber / 4;
+            variant = pieceNumber % 4;
         }
         TetrominoData data = tetrominoes[shape];
 
@@ -77,7 +90,7 @@ public class BoardC : MonoBehaviour
             activePiece.Move(Vector2Int.up);
             activePiece.Move(Vector2Int.up);
         }
-        
+
         if ((variant / 2) % 2 == 1) // Mirror if 2 or 3
             activePiece.Mirror();
 
@@ -135,7 +148,7 @@ public class BoardC : MonoBehaviour
                 for (int row = 0; row < height; row++)
                 {
                     Vector3Int position = new Vector3Int(start + col, down + row, 0);
-                    teleport[col,row] = tilemap.GetTile(position);
+                    teleport[col, row] = tilemap.GetTile(position);
                 }
             }
 
@@ -145,7 +158,7 @@ public class BoardC : MonoBehaviour
                 for (int row = down; row < up; row++)
                 {
                     Vector3Int oldPosition = new Vector3Int(col, row, 0);
-                    Vector3Int newPosition = new Vector3Int(col-shift, row, 0);
+                    Vector3Int newPosition = new Vector3Int(col - shift, row, 0);
                     tilemap.SetTile(newPosition, tilemap.GetTile(oldPosition));
                 }
             }
@@ -171,7 +184,7 @@ public class BoardC : MonoBehaviour
                     teleport[col, row] = tilemap.GetTile(position);
                 }
             }
-        
+
             // Shift all the other tiles on the 'shift' distance
             for (int col = end - shift - 1; col >= start; col--)
             {
@@ -182,7 +195,7 @@ public class BoardC : MonoBehaviour
                     tilemap.SetTile(newPosition, tilemap.GetTile(oldPosition));
                 }
             }
-        
+
             // Shift all the other tiles on the 'shift' distance
             for (int col = 0; col < shift; col++)
             {

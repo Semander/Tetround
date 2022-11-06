@@ -6,7 +6,7 @@ using UnityEngine.Networking.Types;
 public class Piece : MonoBehaviour
 {
     public GameObject otherGameObject;
-    
+
     public BoardC board { get; private set; }
     public Transform center { get; private set; }
     public TetrominoData data { get; private set; }
@@ -61,30 +61,25 @@ public class Piece : MonoBehaviour
         // before it locks in place
         lockTime += Time.deltaTime;
 
-        if      (Input.GetKeyDown(KeyCode.Z)) // Handle 45 degree rotation
+        if (Input.GetKeyDown(KeyCode.Z)) // Handle 45 degree rotation
         {
             Rotate45(-1);
-            Debug.Log(rotationIndex);
         }
         else if (Input.GetKeyDown(KeyCode.X))
         {
             Rotate45(1);
-            Debug.Log(rotationIndex);
         }
         else if (Input.GetKeyDown(KeyCode.C)) // Handle 90 degree rotation
         {
             Rotate(-1);
-            Debug.Log(rotationIndex);
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
             Rotate(1);
-            Debug.Log(rotationIndex);
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
             Rotate180();
-            Debug.Log(rotationIndex);
         }
 
         // Handle mirror reflecction
@@ -111,7 +106,7 @@ public class Piece : MonoBehaviour
         {
             Step();
         }
-        
+
         board.Set(this);
     }
 
@@ -133,7 +128,7 @@ public class Piece : MonoBehaviour
         {
             if (!Move(Vector2Int.left))
             {
-                if (!Move(new Vector2Int(-1,-1))) // Try left and down
+                if (!Move(new Vector2Int(-1, -1))) // Try left and down
                 {
                     Move(new Vector2Int(-1, 1)); // Try left and up
                 }
@@ -143,9 +138,9 @@ public class Piece : MonoBehaviour
         {
             if (!Move(Vector2Int.right))
             {
-                if (!Move(new Vector2Int( 1,-1))) // Try right and down
+                if (!Move(new Vector2Int(1, -1))) // Try right and down
                 {
-                    Move(new Vector2Int( 1, 1)); // Try right and up
+                    Move(new Vector2Int(1, 1)); // Try right and up
                 }
             }
         }
@@ -295,11 +290,11 @@ public class Piece : MonoBehaviour
         {
             if (rotationIndex % 2 == 0)//if next rotation is normal (not diagonal)
             {
-                cells = new Vector3Int[] { new Vector3Int( 0, 0, 0), new Vector3Int( 0, 1, 0), new Vector3Int( 1, 0, 0), new Vector3Int( 1, 1, 0) };
-            } 
+                cells = new Vector3Int[] { new Vector3Int(0, 0, 0), new Vector3Int(0, 1, 0), new Vector3Int(1, 0, 0), new Vector3Int(1, 1, 0) };
+            }
             else
             {
-                cells = new Vector3Int[] { new Vector3Int(0,-1, 0), new Vector3Int(-1, 0, 0), new Vector3Int( 1, 0, 0), new Vector3Int( 0, 1, 0) };
+                cells = new Vector3Int[] { new Vector3Int(0, -1, 0), new Vector3Int(-1, 0, 0), new Vector3Int(1, 0, 0), new Vector3Int(0, 1, 0) };
             }
         }
         else if (data.tetromino == Tetromino.T || data.tetromino == Tetromino.Y)
@@ -345,10 +340,10 @@ public class Piece : MonoBehaviour
                     case Tetromino.Z:
                     case Tetromino.S:
                     case Tetromino.J:
-                    // "I" is rotated from an offset center point
-                    cent.x -= 0.5f;
-                    cent.y -= 0.5f;
-                    break;
+                        // "I" is rotated from an offset center point
+                        cent.x -= 0.5f;
+                        cent.y -= 0.5f;
+                        break;
                 }
                 x = Mathf.CeilToInt((cent.x * matrix1[0]) + (cent.y * matrix1[1] * direction));
                 y = Mathf.CeilToInt((cent.x * matrix1[2] * direction) + (cent.y * matrix1[3]));
@@ -366,7 +361,7 @@ public class Piece : MonoBehaviour
 
     public bool Mirror()
     {
-        
+
         mirrorIndex *= -1;
 
         ApplyMirroring();
@@ -467,7 +462,7 @@ public class Piece : MonoBehaviour
     public bool TestWallKicks(int direction)
     {
         int wallKickIndex = direction * mirrorIndex;
-        
+
         // Test all possible positions
         for (int i = 0; i < data.wallKicks.GetLength(0); i++)
         {

@@ -727,7 +727,7 @@ GameObject:
   m_Component:
   - component: {fileID: 801425084}
   - component: {fileID: 801425086}
-  - component: {fileID: 801425085}
+  - component: {fileID: 801425087}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -751,21 +751,6 @@ Transform:
   m_Father: {fileID: 1840793869}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &801425085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 801425083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8eff7816b0473c4b96852b0921f8a46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: fa149a6fb0bbc0c4a9c50c6fe80249b6, type: 2}
-  mainBoard: {fileID: 1027776495}
-  trackingPiece: {fileID: 1027776496}
 --- !u!156049354 &801425086
 Grid:
   m_ObjectHideFlags: 0
@@ -778,6 +763,21 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &801425087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801425083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8eff7816b0473c4b96852b0921f8a46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tile: {fileID: 11400000, guid: fa149a6fb0bbc0c4a9c50c6fe80249b6, type: 2}
+  mainBoard: {fileID: 1027776496}
+  trackingPiece: {fileID: 1027776495}
 --- !u!1 &1027776492
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,8 +788,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1027776493}
   - component: {fileID: 1027776494}
-  - component: {fileID: 1027776495}
   - component: {fileID: 1027776496}
+  - component: {fileID: 1027776495}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -834,7 +834,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1027776492}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82390d7079963df46a968837986a0df1, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e1cf41d9e29d584fa41317896b9f4dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherGameObject: {fileID: 209888248}
+  stepDelay: 1
+  moveDelay: 0.1
+  lockDelay: 0.5
+--- !u!114 &1027776496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027776492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f1b644f29837b94e81bac829f5a9ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tetrominoes:
@@ -862,22 +878,8 @@ MonoBehaviour:
     tetromino: 10
   boardSize: {x: 10, y: 20}
   spawnPosition: {x: -1, y: 8, z: 0}
---- !u!114 &1027776496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1027776492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e1cf41d9e29d584fa41317896b9f4dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  otherGameObject: {fileID: 209888248}
-  stepDelay: 2
-  moveDelay: 0.1
-  lockDelay: 0.5
+  pieceWaves: 16000000160000000000000000000000000000000000000016000000160000000600000006000000
+  nextPiece: 0
 --- !u!1 &1777925862
 GameObject:
   m_ObjectHideFlags: 0
