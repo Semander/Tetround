@@ -1,2 +1,2 @@
 # Tetround
-A hugely improved Tetris game expirience!
+A hugely improved Tetris game experience!
