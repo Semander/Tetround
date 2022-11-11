@@ -18,8 +18,8 @@ public static class Data
         { Tetromino.Y, new Vector2Int[] { new Vector2Int( 0, 0), new Vector2Int( 0, 1), new Vector2Int(-1, 0), new Vector2Int( 1, -1) } },
 
         { Tetromino.Z, new Vector2Int[] { new Vector2Int( 1, 1), new Vector2Int( 0, 1), new Vector2Int( 1, 0), new Vector2Int( 2, 0) } },
-        { Tetromino.S, new Vector2Int[] { new Vector2Int( 0, 0), new Vector2Int(-1, 0), new Vector2Int( 1, 1), new Vector2Int( 2, 1) } },
         { Tetromino.L, new Vector2Int[] { new Vector2Int( 0, 0), new Vector2Int( 1, 0), new Vector2Int(-1, 0), new Vector2Int(-1, 1) } },
+        { Tetromino.S, new Vector2Int[] { new Vector2Int( 0, 0), new Vector2Int(-1, 0), new Vector2Int( 1, 1), new Vector2Int( 2, 1) } },
         { Tetromino.J, new Vector2Int[] { new Vector2Int( 0, 1), new Vector2Int(-1, 1), new Vector2Int( 1, 1), new Vector2Int( 2, 0) } },
         { Tetromino.R, new Vector2Int[] { new Vector2Int( 0, 1), new Vector2Int(-1, 0), new Vector2Int( 1, 1), new Vector2Int( 1, 0) } },
         { Tetromino.P, new Vector2Int[] { new Vector2Int( 0, 0), new Vector2Int(-1,-1), new Vector2Int( 1, 0), new Vector2Int( 1, 1) } },

@@ -13,7 +13,10 @@ public class BoardC : MonoBehaviour
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
 
-    public int[] pieceWaves = new int[] { 0, 22, 0, 0, 0, 0, 22, 22, 6, 6 };
+    [System.NonSerialized]
+    public int[] pieceWaves = new int[] { 22, 22, 0, 0, 0, 0, 22, 22, 6, 6,
+                                          4, 14, 4, 22, 0, 0, 0, 14, 26
+                                        };
     public int nextPiece;
 
     public RectInt Bounds

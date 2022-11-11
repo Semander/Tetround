@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: de16669483ee2b6439a4e73105062ac3
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Tickerbit
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: cc4f2b861d04b8e429f5c11c74b76048, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -77,13 +77,11 @@ public class Piece : MonoBehaviour
         {
             Rotate(1);
         }
-        else if (Input.GetKeyDown(KeyCode.B))
+        else if (Input.GetKeyDown(KeyCode.B)) // Handle 90 degree rotation
         {
             Rotate180();
         }
-
-        // Handle mirror reflecction
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow)) // Handle mirror reflection
         {
             Mirror();
         }
