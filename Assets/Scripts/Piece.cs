@@ -16,15 +16,18 @@ public class Piece : MonoBehaviour
     public int rotationIndex { get; private set; }
     public int mirrorIndex { get; private set; }
 
+    public int pieceIndex;
+    bool holdPossible;
+
     public float stepDelay = 1f;
-    public float moveDelay = 0.1f;
+    public float moveDelay = 0.07f;
     public float lockDelay = 0.5f;
 
     private float stepTime;
     private float moveTime;
     private float lockTime;
 
-    public void Initialize(BoardC board, Vector3Int position, TetrominoData data, int variant)
+    public void Initialize(BoardC board, Vector3Int position, TetrominoData data, int shape)
     {
         center = otherGameObject.GetComponent<Transform>();
         this.data = data;
@@ -32,6 +35,9 @@ public class Piece : MonoBehaviour
         this.position = position;
 
         MoveCenterPos();
+
+        pieceIndex = shape;
+        holdPossible = true;
 
         rotationIndex = 0;
         mirrorIndex = 1;
@@ -57,9 +63,15 @@ public class Piece : MonoBehaviour
 
         MoveCenterPos();
 
-        // We use a timer to allow the player to make adjustments to the piece
+        // I use a timer to allow the player to make adjustments to the piece
         // before it locks in place
         lockTime += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.RightControl) && holdPossible)
+        { 
+            board.Hold(pieceIndex);
+            holdPossible = false;
+        }
 
         if (Input.GetKeyDown(KeyCode.Z)) // Handle 45 degree rotation
         {
@@ -171,7 +183,7 @@ public class Piece : MonoBehaviour
     {
         board.Set(this);
         board.ClearLines();
-        board.SpawnPiece();
+        board.SpawnPieceFromList();
     }
 
     public bool Move(Vector2Int translation)

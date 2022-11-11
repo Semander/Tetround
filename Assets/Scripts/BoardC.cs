@@ -13,10 +13,16 @@ public class BoardC : MonoBehaviour
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
 
+    public Sprite[] blockSprites;
+    public SpriteRenderer[] nextBlocks;
+    public SpriteRenderer holdBlock;
+
     [System.NonSerialized]
-    public int[] pieceWaves = new int[] { 22, 22, 0, 0, 0, 0, 22, 22, 6, 6,
+    public int[] pieceWaves = new int[] { 4, 22, 22, 0, 0, 0, 0, 22, 22, 6, 6,
                                           4, 14, 4, 22, 0, 0, 0, 14, 26
                                         };
+    public int currentWave = 0;
+    public int holdPiece = -1;
     public int nextPiece;
 
     public RectInt Bounds
@@ -41,40 +47,60 @@ public class BoardC : MonoBehaviour
 
     private void Start()
     {
-        SpawnPiece();
+        SpawnPieceFromList();
     }
 
-    public void SpawnPiece()
+    public void SpawnPieceFromList()
     {
         int pieceNumber = Random.Range(0, 34);
 
 
-        if (nextPiece >= pieceWaves.Length) { 
-            nextPiece = 0;
-            GameOver(); 
-        } 
+        if (nextPiece >= pieceWaves.Length)
+        {
+            if (holdPiece >= 0) // If there is a block in the "hold" section
+            {
+                SpawnPiece(holdPiece);
+                Debug.Log("1" + holdPiece);
+                setHoldPiece(-1);
+                Debug.Log("2" + holdPiece);
+            }
+            else
+            {
+                nextPiece = 0;
+                GameWin();
+            }
+        }
+        else
+        {
+            pieceNumber = pieceWaves[nextPiece];
+            nextPiece++;
+            changeNext();
 
-        pieceNumber = pieceWaves[nextPiece];
-        nextPiece++;
+            SpawnPiece(pieceNumber);
+        }
+    }
 
+    public void SpawnPiece(int pieceIndex)
+    {
         int shape;
         int variant;
 
-        if (pieceNumber < 10) // O,T,I,V,Y blocks have 2 rotations
+        if (pieceIndex < 10) // O,T,I,V,Y blocks have 2 rotations
         {
-            shape = pieceNumber / 2;
-            variant = pieceNumber % 2;
+            shape = pieceIndex / 2;
+            variant = pieceIndex % 2;
         }
-        else // Z,L,S,J,R,P blocks have 2 rotations and 2 mirror variants
+        else // Z,L,S,J,R,P blocks have 2 rotations and 2 mirror variants (4 variants)
         {
-            pieceNumber -= 10; // Getting rid of first 10 indexes (5 shapes with 2 rot)
-            shape = 5 + pieceNumber / 4;
-            variant = pieceNumber % 4;
+            pieceIndex -= 10; // Getting rid of first 10 indexes (5 shapes with 2 rot)
+            shape = 5 + pieceIndex / 4;
+            variant = pieceIndex % 4;
+            pieceIndex += 10; // Resetting index
         }
         TetrominoData data = tetrominoes[shape];
 
 
-        activePiece.Initialize(this, spawnPosition, data, variant);
+        activePiece.Initialize(this, spawnPosition, data, pieceIndex);
 
         // Handle start variant:
         activePiece.TestWallKicks(1);
@@ -83,12 +109,12 @@ public class BoardC : MonoBehaviour
             if (activePiece.data.tetromino == Tetromino.J || activePiece.data.tetromino == Tetromino.Z)
             {
                 if (!activePiece.Rotate45(-1))
-                    GameOver();
+                    GameLost();
             }
             else
             {
                 if (!activePiece.Rotate45(1))
-                    GameOver();
+                    GameLost();
             }
             activePiece.Move(Vector2Int.up);
             activePiece.Move(Vector2Int.up);
@@ -106,15 +132,64 @@ public class BoardC : MonoBehaviour
         }
         else
         {
-            GameOver();
+            GameLost();
         }
     }
 
-    public void GameOver()
+    private void changeNext()
+    {
+        int pieceNumber;
+
+        int maxNextShapes = Mathf.Min(pieceWaves.Length - nextPiece, 4);
+        for (int i = 0; i < 4; i++)
+        {
+            if (i < maxNextShapes)
+            {
+                pieceNumber = pieceWaves[nextPiece + i];
+                nextBlocks[i].sprite = blockSprites[pieceNumber];
+            }
+            else
+            {
+                nextBlocks[i].sprite = null;
+            }
+        }
+    }
+
+    public void Hold(int newHold)
+    {
+        Clear(activePiece); // Delete last piece that was on the board
+        if (holdPiece < 0)
+        {
+            SpawnPieceFromList(); // Add next piece
+        }
+        else
+        {
+            SpawnPiece(holdPiece); // Add holded piece
+        }
+        setHoldPiece(newHold);
+    }
+
+    public void setHoldPiece(int newHold)
+    {
+        if (holdPiece < 0)
+            holdBlock.sprite = blockSprites[newHold];
+        else
+            holdBlock.sprite = null;
+        holdPiece = newHold;
+
+    }
+
+    public void GameLost()
     {
         tilemap.ClearAllTiles();
 
         // Do anything else you want on game over here..
+    }
+
+    public void GameWin()
+    {
+        Application.Quit();
+        Debug.Log("Lol");
     }
 
     public void Set(Piece piece)
