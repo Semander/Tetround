@@ -19,7 +19,6 @@ public class BoardC : MonoBehaviour
 
     [System.NonSerialized]
     public int[] pieceWaves = new int[] { 4, 22, 22, 0, 0, 0, 0, 22, 22, 6, 6,
-                                          4, 14, 4, 22, 0, 0, 0, 14, 26
                                         };
     public int currentWave = 0;
     public int holdPiece = -1;
@@ -60,9 +59,7 @@ public class BoardC : MonoBehaviour
             if (holdPiece >= 0) // If there is a block in the "hold" section
             {
                 SpawnPiece(holdPiece);
-                Debug.Log("1" + holdPiece);
                 setHoldPiece(-1);
-                Debug.Log("2" + holdPiece);
             }
             else
             {
@@ -160,18 +157,18 @@ public class BoardC : MonoBehaviour
         Clear(activePiece); // Delete last piece that was on the board
         if (holdPiece < 0)
         {
-            SpawnPieceFromList(); // Add next piece
+            SpawnPieceFromList(); // Add next piece if hold is empty
         }
         else
         {
-            SpawnPiece(holdPiece); // Add holded piece
+            SpawnPiece(holdPiece); // Add holded piece if possible
         }
         setHoldPiece(newHold);
     }
 
     public void setHoldPiece(int newHold)
     {
-        if (holdPiece < 0)
+        if (newHold >= 0)
             holdBlock.sprite = blockSprites[newHold];
         else
             holdBlock.sprite = null;
@@ -189,7 +186,12 @@ public class BoardC : MonoBehaviour
     public void GameWin()
     {
         Application.Quit();
-        Debug.Log("Lol");
+        Debug.Log("Finish the G");
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+
     }
 
     public void Set(Piece piece)
