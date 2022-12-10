@@ -10530,7 +10530,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1138988441}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -10539,14 +10539,14 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 0
+  m_Spacing: 3
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_ReverseArrangement: 1
 --- !u!1 &1142113041
 GameObject:
   m_ObjectHideFlags: 0
@@ -10837,7 +10837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1138988442}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -11343,6 +11343,7 @@ GameObject:
   - component: {fileID: 1314636237}
   - component: {fileID: 1314636236}
   - component: {fileID: 1314636238}
+  - component: {fileID: 1314636239}
   m_Layer: 5
   m_Name: Board
   m_TagString: Untagged
@@ -11447,6 +11448,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 1
+--- !u!114 &1314636239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314636234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3311ecabfa7665f4da8e4d7110828dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggle: []
 --- !u!1 &1326444987
 GameObject:
   m_ObjectHideFlags: 0

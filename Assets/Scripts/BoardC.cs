@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,8 +19,20 @@ public class BoardC : MonoBehaviour
     public SpriteRenderer holdBlock;
 
     [System.NonSerialized]
-    public int[] pieceWaves = new int[] { 4, 22, 22, 0, 0, 0, 0, 22, 22, 6, 6,
-                                        };
+    public List<List<int>> Packets = new List<List<int>>()
+    {
+        new List<int>() { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, },
+        new List<int>() { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, },
+    };
+    public int[] waveRate = { 5, 10, };
+
+    public List<List<int>> PossibleShapes = new List<List<int>>()
+    {
+        new List<int>() { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32 },
+        new List<int>() { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33 },
+    };
+
+    public int[] pieceWaves = new int[] { 4, 22, 22, 0, 0, 0, 0, 22, 22, 6, 6,};
     public int currentWave = 0;
     public int holdPiece = -1;
     public int nextPiece;
@@ -37,6 +50,8 @@ public class BoardC : MonoBehaviour
     {
         tilemap = GetComponentInChildren<Tilemap>();
         activePiece = GetComponentInChildren<Piece>();
+
+
 
         for (int i = 0; i < tetrominoes.Length; i++)
         {
