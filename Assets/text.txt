@@ -1,0 +1,1 @@
+{"name":"something","rot45":1,"rot90":0}

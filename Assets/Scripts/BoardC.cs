@@ -1,12 +1,14 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
-using static UnityEditor.UIElements.ToolbarMenu;
+using Random = System.Random;
+using System;
 
 public class BoardC : MonoBehaviour
 {
+    public Random rnd = new Random();
     public Tilemap tilemap { get; private set; }
     public Piece activePiece { get; private set; }
 
@@ -18,24 +20,26 @@ public class BoardC : MonoBehaviour
     public SpriteRenderer[] nextBlocks;
     public SpriteRenderer holdBlock;
 
+    public GameSettings myGameSettings = new GameSettings();
+    public GameMode myGameMode = new GameMode();
+    public List<Wave> myWaveList = new List<Wave>();
+    public Wave myWave = new Wave();
+
     [System.NonSerialized]
     public List<List<int>> Packets = new List<List<int>>()
     {
-        new List<int>() { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, },
-        new List<int>() { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, },
-    };
-    public int[] waveRate = { 5, 10, };
-
-    public List<List<int>> PossibleShapes = new List<List<int>>()
-    {
-        new List<int>() { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32 },
-        new List<int>() { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33 },
+        new List<int>() { },
     };
 
-    public int[] pieceWaves = new int[] { 4, 22, 22, 0, 0, 0, 0, 22, 22, 6, 6,};
+    public List<int> PossibleShapesPackets = new List<int>();
+
+    public List<int> possibleShapes = new List<int>();
+
+    [System.NonSerialized]
+    public List<int> pieceWaves = new List<int> { };
     public int currentWave = 0;
     public int holdPiece = -1;
-    public int nextPiece;
+    public int nextPiece = 0;
 
     public RectInt Bounds
     {
@@ -51,12 +55,13 @@ public class BoardC : MonoBehaviour
         tilemap = GetComponentInChildren<Tilemap>();
         activePiece = GetComponentInChildren<Piece>();
 
-
+        addPieceWaves();
 
         for (int i = 0; i < tetrominoes.Length; i++)
         {
             tetrominoes[i].Initialize();
         }
+
     }
 
     private void Start()
@@ -64,12 +69,57 @@ public class BoardC : MonoBehaviour
         SpawnPieceFromList();
     }
 
+    int i = 0;
+    private void addPieceWaves()
+    {
+        string json = File.ReadAllText(Application.dataPath + "/" + FileNameController.filePath + ".json");
+        myGameSettings = JsonUtility.FromJson<GameSettings>(json);
+
+        Debug.Log(Application.dataPath + "/" + FileNameController.filePath + ".json");
+
+        myGameMode = myGameSettings.gameMode;
+        myWaveList = myGameSettings.wave;
+
+        for (int j = 0; j < myWaveList.Count; j++)
+        {
+            PossibleShapesPackets.Clear();
+            possibleShapes.Clear();
+
+            myWave = myWaveList[j];
+
+            int waveAmount = myWave.waveAmount;
+            long number = myWave.shapes;
+
+            //Debug.Log("Wave amount: " + waveAmount + ", number: " + number);
+
+            
+            for (i = 0; number > 0; number >>= 1)// parse into bits positions
+            {
+                if (number % 2 == 1)
+                {
+                    PossibleShapesPackets.Add(i);
+                }
+                i += 1;
+            }
+
+            int amountOfShapesInPacket = PossibleShapesPackets.Count;
+            int repeatPacket = (waveAmount + amountOfShapesInPacket - 1) / amountOfShapesInPacket;
+
+            for (i = 0; i < repeatPacket; i++) // repeat packet if amount of waves is more than shapes in the packet
+            {
+                possibleShapes.AddRange(PossibleShapesPackets);
+            }
+            pieceWaves.AddRange(possibleShapes.OrderBy(x => rnd.Next()).Take(waveAmount));// get "waveAmount" amount of pieces from the list of possible shapes
+        }
+
+    }
+
     public void SpawnPieceFromList()
     {
-        int pieceNumber = Random.Range(0, 34);
+        int pieceNumber = rnd.Next(0, 34);
 
 
-        if (nextPiece >= pieceWaves.Length)
+        if (nextPiece >= pieceWaves.Count)
         {
             if (holdPiece >= 0) // If there is a block in the "hold" section
             {
@@ -152,7 +202,7 @@ public class BoardC : MonoBehaviour
     {
         int pieceNumber;
 
-        int maxNextShapes = Mathf.Min(pieceWaves.Length - nextPiece, 4);
+        int maxNextShapes = Mathf.Min(pieceWaves.Count - nextPiece, 4);
         for (int i = 0; i < 4; i++)
         {
             if (i < maxNextShapes)

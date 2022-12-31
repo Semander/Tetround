@@ -89,7 +89,7 @@ public class Piece : MonoBehaviour
         {
             Rotate(1);
         }
-        else if (Input.GetKeyDown(KeyCode.B)) // Handle 90 degree rotation
+        else if (Input.GetKeyDown(KeyCode.B)) // Handle 180 degree rotation
         {
             Rotate180();
         }
@@ -176,6 +176,8 @@ public class Piece : MonoBehaviour
         {
             continue;
         }
+        // Update the step time to prevent double movement
+        stepTime = Time.time + stepDelay;
 
     }
 
@@ -184,6 +186,8 @@ public class Piece : MonoBehaviour
         board.Set(this);
         board.ClearLines();
         board.SpawnPieceFromList();
+        // Update the step time to prevent double movement
+        stepTime = Time.time + stepDelay;
     }
 
     public bool Move(Vector2Int translation)

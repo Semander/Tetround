@@ -1566,6 +1566,9 @@ MonoBehaviour:
   - {fileID: 1732861880}
   - {fileID: 1571568158}
   holdBlock: {fileID: 583085985}
+  waveRate: 050000000a000000
+  PossibleShapesPackets: 
+  possibleShapes: 
   currentWave: 0
   holdPiece: -1
   nextPiece: 0

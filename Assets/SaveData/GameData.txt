@@ -1,0 +1,8 @@
+{
+	"player":
+	{
+		"name": "no way",
+		"rot": 50,
+		"rotate": 1
+	}
+}

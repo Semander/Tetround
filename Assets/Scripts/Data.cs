@@ -25,7 +25,7 @@ public static class Data
         { Tetromino.P, new Vector2Int[] { new Vector2Int( 0, 0), new Vector2Int(-1,-1), new Vector2Int( 1, 0), new Vector2Int( 1, 1) } },
     };
 
-    public static readonly Vector2Int[] WallKicks_list = new Vector2Int[]                          // The order of attempts after rotation:
+    public static readonly Vector2Int[] WallKicks_list = new Vector2Int[]                          // The order of wallkick attempts after rotation (0 is center):
     {                                                                                              //               12
         new Vector2Int( 0, 0), new Vector2Int( 0,-1), new Vector2Int( 1,-1), new Vector2Int(-1,-1),//             9  7  8
         new Vector2Int( 0,-2), new Vector2Int( 1, 0), new Vector2Int(-1, 0), new Vector2Int( 0, 1),//          11 6  0  5 10
