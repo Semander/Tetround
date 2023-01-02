@@ -6,7 +6,7 @@ public class FindSetToggle : MonoBehaviour
     public Toggle[] toggle;
 
     [System.NonSerialized]
-    private int shapeAmount = 34;
+    private int shapeAmount; //= 34;
     [System.NonSerialized]
     private bool[] shapes;
 
@@ -16,15 +16,10 @@ public class FindSetToggle : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < shapeAmount; i++)
+        for (int i = 0; i < toggle.Length; i++)
         {
             shapes[i] = toggle[i].isOn;
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
