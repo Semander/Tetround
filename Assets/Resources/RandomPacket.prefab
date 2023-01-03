@@ -1845,7 +1845,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7838182633190133958}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8644001606551077080}
+        m_TargetAssemblyTypeName: RandPacket, Assembly-CSharp
+        m_MethodName: Destr
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7838182633211666478
 GameObject:
   m_ObjectHideFlags: 0
@@ -8228,7 +8240,7 @@ MonoBehaviour:
   input: {fileID: 7838182634967778055}
   currentWave: {fileID: 7838182634470144816}
   toggleBits: 0
-  toggle:
+  toggles:
   - {fileID: 7838182633669607954}
   - {fileID: 7838182634842687662}
   - {fileID: 7838182633048838488}
@@ -8263,6 +8275,9 @@ MonoBehaviour:
   - {fileID: 7838182633741475695}
   - {fileID: 7838182633244653144}
   - {fileID: 7838182634678097140}
+  wavePacket:
+    waveAmount: 0
+    shapes: 0
 --- !u!1 &7838182633921773369
 GameObject:
   m_ObjectHideFlags: 0

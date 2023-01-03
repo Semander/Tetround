@@ -32,7 +32,7 @@ public class GameMode
 public class Wave
 {
     public int waveAmount; // amount of waves this set will work
-    public int shapes;
+    public long shapes;
 }
 
 public class JsonReadWriteSystem : MonoBehaviour

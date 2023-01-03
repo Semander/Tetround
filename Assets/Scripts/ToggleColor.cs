@@ -18,8 +18,17 @@ public class ToggleColor : MonoBehaviour
 
     public void ToggleColorChanged(bool isOn)
     {
+        ColorBlock cb;
         //Debug.Log("Is on: " + isOn);
-        ColorBlock cb = toggle.colors;
+        try
+        {
+            cb = toggle.colors;
+        }
+        catch
+        {
+            toggle = GetComponent<Toggle>();
+            cb = toggle.colors;
+        }
         if (isOn)
         {
             cb.normalColor = mainColorOn;

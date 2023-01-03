@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class RandPacket : MonoBehaviour
 {
+    int Ident;
     public TMP_Text ID;
     public int waveAmount = 0;
     public TMP_InputField input;
@@ -14,9 +15,11 @@ public class RandPacket : MonoBehaviour
 
     public long toggleBits = 0;
 
-    public Toggle[] toggle;
+    public Toggle[] toggles;
 
     [NonSerialized] public AddPacketToContent parentScript;
+
+    public Wave wavePacket = new Wave();
 
     public void UpdWaveAmount(string waveAmountString)
     {
@@ -41,27 +44,53 @@ public class RandPacket : MonoBehaviour
         }
         else { currentWave.text = currWave.ToString(); }
 
+        wavePacket.waveAmount = waveAmount;
+
         return lastWave;
     }
 
     public void UpdId(int id)
     {
+        Ident = id;
         ID.text = id.ToString();
     }
 
-    public long UpdBits()
+    public Wave UpdBits()
     {
         toggleBits = 0;
 
-        for (int i = toggle.Length - 1; i >= 0; i--)
+        for (int i = toggles.Length - 1; i >= 0; i--)
         {
             toggleBits <<= 1;
-            if (toggle[i].isOn)
+            if (toggles[i].isOn)
             {
                 toggleBits++;
             }
         }
         Debug.Log("bits: " + toggleBits);
-        return toggleBits;
+
+        wavePacket.shapes = toggleBits;
+        return wavePacket;
     }
+
+    public void UpdWave(Wave wave)
+    {
+        long bits = wave.shapes;
+        for (int i = 0; i < toggles.Length; i++)
+        {
+            if (bits%2 == 1)
+            {
+                toggles[i].isOn = true;
+            }
+            bits >>= 1;
+        }
+        waveAmount = wave.waveAmount;
+        input.text = waveAmount.ToString();
+    }
+
+    public void Destr()
+    {
+        parentScript.DeleteRPackage(Ident);
+    }
+
 }
