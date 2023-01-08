@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RandPacket : MonoBehaviour
@@ -33,6 +34,11 @@ public class RandPacket : MonoBehaviour
             waveAmount = 0;
         }
         parentScript.UpdCurrWave();
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 
     public int UpdCurrentWave(int currWave)

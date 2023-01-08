@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class AddPacketToContent : MonoBehaviour
 {
@@ -24,11 +25,13 @@ public class AddPacketToContent : MonoBehaviour
     {
         LoadFromJson();
     }
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("User Levels");
+    }
 
     public void AddPacket()
     {
-        Debug.Log("lol");
-
         RPacket = Instantiate(Resources.Load("RandomPacket")) as GameObject;
         RPacket.transform.SetParent(transform, false);
         RPacket.transform.SetAsFirstSibling();
@@ -71,13 +74,11 @@ public class AddPacketToContent : MonoBehaviour
 
     public void LoadFromJson()
     {
-        string json = File.ReadAllText(Application.dataPath + "/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json");
         myGameSettings = JsonUtility.FromJson<GameSettings>(json);
 
-        Debug.Log(Application.dataPath + "/" + FileNameController.filePath + ".json");
-
         myGameMode = myGameSettings.gameMode;
-        myWaveList = myGameSettings.wave;
+        myWaveList = myGameSettings.waveList;
 
         for (int j = 0; j < myWaveList.Count; j++)
         {
@@ -101,12 +102,17 @@ public class AddPacketToContent : MonoBehaviour
 
     public void LoadToJson()
     {
-
+        myWaveList.Clear();
         for (int i = 0; i < randPacketList.Count; i++)
         {
-            myWave = randPacketList[i].UpdBits(); // update all needed data
+            myWaveList.Add(randPacketList[i].UpdBits()); // update all needed data and pass the Wave object
+
+
+            myGameSettings.gameMode = myGameMode;
+            myGameSettings.waveList = myWaveList;
+
+            string json = JsonUtility.ToJson(myGameSettings, true);
+            File.WriteAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json", json);
         }
-
-
     }
-}
+ }

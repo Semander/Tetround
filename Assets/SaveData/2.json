@@ -17,7 +17,11 @@
     "waveList": [
         {
             "waveAmount": 0,
-            "shapes": 256
+            "shapes": 0
+        },
+        {
+            "waveAmount": 10,
+            "shapes": 4
         }
     ]
 }

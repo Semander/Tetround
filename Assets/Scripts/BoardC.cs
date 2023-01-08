@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = System.Random;
 using System;
+using UnityEngine.SceneManagement;
 
 public class BoardC : MonoBehaviour
 {
@@ -61,56 +62,64 @@ public class BoardC : MonoBehaviour
         {
             tetrominoes[i].Initialize();
         }
+        SpawnPieceFromList();
 
     }
 
     private void Start()
     {
-        SpawnPieceFromList();
     }
 
     int i = 0;
     private void addPieceWaves()
     {
-        string json = File.ReadAllText(Application.dataPath + "/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json");
         myGameSettings = JsonUtility.FromJson<GameSettings>(json);
 
-        Debug.Log(Application.dataPath + "/" + FileNameController.filePath + ".json");
+        Debug.Log(FileNameController.filePath);
+
 
         myGameMode = myGameSettings.gameMode;
-        myWaveList = myGameSettings.wave;
+        myWaveList = myGameSettings.waveList;
 
-        for (int j = 0; j < myWaveList.Count; j++)
+        if (myWaveList == null) SceneManager.LoadScene("User Level");
+        else
         {
-            PossibleShapesPackets.Clear();
-            possibleShapes.Clear();
-
-            myWave = myWaveList[j];
-
-            int waveAmount = myWave.waveAmount;
-            long number = myWave.shapes;
-
-            //Debug.Log("Wave amount: " + waveAmount + ", number: " + number);
-
-            
-            for (i = 0; number > 0; number >>= 1)// parse into bits positions
+            for (int j = 0; j < myWaveList.Count; j++)
             {
-                if (number % 2 == 1)
+                PossibleShapesPackets.Clear();
+                possibleShapes.Clear();
+
+                myWave = myWaveList[j];
+
+                int waveAmount = myWave.waveAmount;
+                long number = myWave.shapes;
+
+                //Debug.Log("Wave amount: " + waveAmount + ", number: " + number);
+
+
+                for (i = 0; number > 0; number >>= 1)// parse into bits positions
                 {
-                    PossibleShapesPackets.Add(i);
+                    if (number % 2 == 1)
+                    {
+                        PossibleShapesPackets.Add(i);
+                    }
+                    i += 1;
                 }
-                i += 1;
-            }
 
-            int amountOfShapesInPacket = PossibleShapesPackets.Count;
-            int repeatPacket = (waveAmount + amountOfShapesInPacket - 1) / amountOfShapesInPacket;
+                int amountOfShapesInPacket = PossibleShapesPackets.Count;
+                if (amountOfShapesInPacket == 0) continue;
 
-            for (i = 0; i < repeatPacket; i++) // repeat packet if amount of waves is more than shapes in the packet
-            {
-                possibleShapes.AddRange(PossibleShapesPackets);
+                int repeatPacket = (waveAmount + amountOfShapesInPacket - 1) / amountOfShapesInPacket;
+
+                for (i = 0; i < repeatPacket; i++) // repeat packet if amount of waves is more than shapes in the packet
+                {
+                    possibleShapes.AddRange(PossibleShapesPackets);
+                }
+                pieceWaves.AddRange(possibleShapes.OrderBy(x => rnd.Next()).Take(waveAmount));// get "waveAmount" amount of pieces from the list of possible shapes
             }
-            pieceWaves.AddRange(possibleShapes.OrderBy(x => rnd.Next()).Take(waveAmount));// get "waveAmount" amount of pieces from the list of possible shapes
         }
+        
 
     }
 
@@ -160,7 +169,6 @@ public class BoardC : MonoBehaviour
             pieceIndex += 10; // Resetting index
         }
         TetrominoData data = tetrominoes[shape];
-
 
         activePiece.Initialize(this, spawnPosition, data, pieceIndex);
 
@@ -250,13 +258,8 @@ public class BoardC : MonoBehaviour
 
     public void GameWin()
     {
-        Application.Quit();
+        SceneManager.LoadScene("Menu");
         Debug.Log("Finish the G");
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
-
     }
 
     public void Set(Piece piece)

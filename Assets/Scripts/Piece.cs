@@ -27,6 +27,8 @@ public class Piece : MonoBehaviour
     private float moveTime;
     private float lockTime;
 
+    private bool isInit = false;
+
     public void Initialize(BoardC board, Vector3Int position, TetrominoData data, int shape)
     {
         center = otherGameObject.GetComponent<Transform>();
@@ -55,69 +57,74 @@ public class Piece : MonoBehaviour
         {
             cells[i] = (Vector3Int)data.cells[i];
         }
+        isInit = true;
     }
 
     private void Update()
     {
-        board.Clear(this);
+        if (isInit)
+        {
+            board.Clear(this);
 
-        MoveCenterPos();
+            MoveCenterPos();
 
-        // I use a timer to allow the player to make adjustments to the piece
-        // before it locks in place
-        lockTime += Time.deltaTime;
+            // I use a timer to allow the player to make adjustments to the piece
+            // before it locks in place
+            lockTime += Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.RightControl) && holdPossible)
-        { 
-            board.Hold(pieceIndex);
-            holdPossible = false;
-        }
+            if (Input.GetKeyDown(KeyCode.RightControl) && holdPossible)
+            {
+                board.Hold(pieceIndex);
+                holdPossible = false;
+            }
 
-        if (Input.GetKeyDown(KeyCode.Z)) // Handle 45 degree rotation
-        {
-            Rotate45(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.X))
-        {
-            Rotate45(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.C)) // Handle 90 degree rotation
-        {
-            Rotate(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.V))
-        {
-            Rotate(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.B)) // Handle 180 degree rotation
-        {
-            Rotate180();
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow)) // Handle mirror reflection
-        {
-            Mirror();
-        }
+            if (Input.GetKeyDown(KeyCode.Z)) // Handle 45 degree rotation
+            {
+                Rotate45(-1);
+            }
+            else if (Input.GetKeyDown(KeyCode.X))
+            {
+                Rotate45(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.C)) // Handle 90 degree rotation
+            {
+                Rotate(-1);
+            }
+            else if (Input.GetKeyDown(KeyCode.V))
+            {
+                Rotate(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.B)) // Handle 180 degree rotation
+            {
+                Rotate180();
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow)) // Handle mirror reflection
+            {
+                Mirror();
+            }
 
-        // Handle hard drop
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            HardDrop();
-        }
+            // Handle hard drop
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                HardDrop();
+            }
 
-        // Allow the player to hold movement keys but only after a move delay
-        // so it does not move too fast
-        if (Time.time > moveTime)
-        {
-            HandleMoveInputs();
-        }
+            // Allow the player to hold movement keys but only after a move delay
+            // so it does not move too fast
+            if (Time.time > moveTime)
+            {
+                HandleMoveInputs();
+            }
 
-        // Advance the piece to the next row every x seconds
-        if (Time.time > stepTime)
-        {
-            Step();
-        }
+            // Advance the piece to the next row every x seconds
+            if (Time.time > stepTime)
+            {
+                Step();
+            }
 
-        board.Set(this);
+            board.Set(this);
+        }
+        else { Debug.Log("Oh no///"); }
     }
 
     private void HandleMoveInputs()

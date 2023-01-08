@@ -12,6 +12,11 @@ public class SceneSwitch : MonoBehaviour
         SceneManager.LoadScene("Game Scene");
     }
 
+    public void Editor()
+    {
+        SceneManager.LoadScene("User Levels");
+    }
+
     // Update is called once per frame
     public void Exit()
     {

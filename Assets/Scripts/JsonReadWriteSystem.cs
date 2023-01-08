@@ -9,7 +9,7 @@ public class GameSettings
     public bool isCompleted; // Did you finish the level?
     public int score; // Best score so far (even if no finish)
     public GameMode gameMode; // All settings for buttons and gravity
-    public List<Wave> wave; // Pieces allignment and amount of waves
+    public List<Wave> waveList; // Pieces allignment and amount of waves
 }
 
 [Serializable]
@@ -34,6 +34,29 @@ public class Wave
     public int waveAmount; // amount of waves this set will work
     public long shapes;
 }
+
+
+[Serializable]
+public class LevelSave
+{
+    public List<Official> official;
+    public List<User> user;
+}
+[Serializable]
+public class Official
+{
+    public string name;
+    public bool isCompleted;
+}
+[Serializable]
+public class User
+{
+    public int id;
+    public string name;
+    public bool isCompleted;
+}
+
+
 
 public class JsonReadWriteSystem : MonoBehaviour
 {
@@ -63,7 +86,7 @@ public class JsonReadWriteSystem : MonoBehaviour
 
     public GameMode LoadFromJson()
     {
-        string json = File.ReadAllText(Application.dataPath + "/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json");
 
         GameMode myGameMode = JsonUtility.FromJson<GameMode>(json);
 
