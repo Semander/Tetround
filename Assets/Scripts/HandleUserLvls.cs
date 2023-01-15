@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using UnityEditor.Sprites;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -86,7 +83,7 @@ public class HandleUserLvls : MonoBehaviour
         myGameSettings.gameMode = myGameMode;
 
         string json = JsonUtility.ToJson(myGameSettings, true);
-        File.WriteAllText(Application.dataPath + "/SaveData/" + Id.ToString() + ".json", json);
+        File.WriteAllText(Application.streamingAssetsPath + "/SaveData/" + Id.ToString() + ".json", json);
 
         myUser = new User();
         myUser.id = Id;
@@ -97,7 +94,7 @@ public class HandleUserLvls : MonoBehaviour
         myLevelSave.user = myUserList;
 
         json = JsonUtility.ToJson(myLevelSave, true);
-        File.WriteAllText(Application.dataPath + "/SaveData/SaveFile.json", json);
+        File.WriteAllText(Application.streamingAssetsPath + "/SaveData/SaveFile.json", json);
     }
 
     public void DeleteLevel(int Id)
@@ -109,13 +106,13 @@ public class HandleUserLvls : MonoBehaviour
 
         UpdAllValues();
 
-        File.Delete(Application.dataPath + "/SaveData/" + Id.ToString() + ".json");
+        File.Delete(Application.streamingAssetsPath + "/SaveData/" + Id.ToString() + ".json");
         LoadToJson();
     }
 
     public void LoadFromJson()
     {
-        string json = File.ReadAllText(Application.dataPath + "/SaveData/SaveFile.json");
+        string json = File.ReadAllText(Application.streamingAssetsPath + "/SaveData/SaveFile.json");
         myLevelSave = JsonUtility.FromJson<LevelSave>(json);
 
         myUserList = myLevelSave.user;
@@ -153,7 +150,7 @@ public class HandleUserLvls : MonoBehaviour
             myLevelSave.user = myUserList;
 
             string json = JsonUtility.ToJson(myLevelSave, true);
-            File.WriteAllText(Application.dataPath + "/SaveData/SaveFile.json", json);
+            File.WriteAllText(Application.streamingAssetsPath + "/SaveData/SaveFile.json", json);
         }
     }
 }

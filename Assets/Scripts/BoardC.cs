@@ -6,6 +6,8 @@ using UnityEngine.Tilemaps;
 using Random = System.Random;
 using System;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class BoardC : MonoBehaviour
 {
@@ -26,6 +28,12 @@ public class BoardC : MonoBehaviour
     public List<Wave> myWaveList = new List<Wave>();
     public Wave myWave = new Wave();
 
+    public TMP_Text scoreText;
+    public TMP_Text wavesText;
+
+    public TMP_Text PauseScoreText;
+    public TMP_Text PauseBestScoreText;
+
     [System.NonSerialized]
     public List<List<int>> Packets = new List<List<int>>()
     {
@@ -37,10 +45,42 @@ public class BoardC : MonoBehaviour
     public List<int> possibleShapes = new List<int>();
 
     [System.NonSerialized]
-    public List<int> pieceWaves = new List<int> { };
-    public int currentWave = 0;
+    public List<int> pieceWaves = new List<int>();
+
+    public int currWave = 0;
+    public int maxWave = 1;
+    public int pieceIndex;
     public int holdPiece = -1;
-    public int nextPiece = 0;
+
+    public int score = 0;
+    public int bestScore;
+
+    public bool rotClock45;
+    public bool rotCount45;
+    public bool rotClock90;
+    public bool rotCount90;
+    public bool rotClock180;
+    public bool mirroring;
+    public bool moveRight;
+    public bool moveLeft;
+    public bool moveDown;
+    public bool drop;
+    public bool gravity;
+
+    public GameObject Co45;
+    public GameObject Cl45;
+    public GameObject Co90;
+    public GameObject Cl90;
+    public GameObject R180;
+    public GameObject Mirr;
+    public GameObject Movr;
+    public GameObject Movl;
+    public GameObject Movd;
+    public GameObject Drop;
+
+    public GameObject PauseWindow;
+
+    public Button PauseButton;
 
     public RectInt Bounds
     {
@@ -66,14 +106,11 @@ public class BoardC : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-    }
 
     int i = 0;
     private void addPieceWaves()
     {
-        string json = File.ReadAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json");
         myGameSettings = JsonUtility.FromJson<GameSettings>(json);
 
         Debug.Log(FileNameController.filePath);
@@ -81,6 +118,32 @@ public class BoardC : MonoBehaviour
 
         myGameMode = myGameSettings.gameMode;
         myWaveList = myGameSettings.waveList;
+
+        rotClock45 = myGameMode.rotClock45;
+        rotCount45 = myGameMode.rotCount45;
+        rotClock90 = myGameMode.rotClock90;
+        rotCount90 = myGameMode.rotCount90;
+        rotClock180 = myGameMode.rotClock180;
+        mirroring = myGameMode.mirroring;
+        moveRight = myGameMode.moveRight;
+        moveLeft = myGameMode.moveLeft;
+        moveDown = myGameMode.moveDown;
+        drop = myGameMode.drop;
+        gravity = myGameMode.gravity;
+
+        Co45.SetActive(rotClock45); 
+        Cl45.SetActive(rotCount45); 
+        Co90.SetActive(rotClock90); 
+        Cl90.SetActive(rotCount90); 
+        R180.SetActive(rotClock180); 
+        Mirr.SetActive(mirroring); 
+        Movr.SetActive(moveRight); 
+        Movl.SetActive(moveLeft); 
+        Movd.SetActive(moveDown); 
+        Drop.SetActive(drop);
+
+        bestScore = myGameSettings.score;
+        PauseBestScoreText.text = bestScore.ToString();
 
         if (myWaveList == null) SceneManager.LoadScene("User Level");
         else
@@ -94,6 +157,8 @@ public class BoardC : MonoBehaviour
 
                 int waveAmount = myWave.waveAmount;
                 long number = myWave.shapes;
+
+                maxWave += waveAmount;
 
                 //Debug.Log("Wave amount: " + waveAmount + ", number: " + number);
 
@@ -119,16 +184,54 @@ public class BoardC : MonoBehaviour
                 pieceWaves.AddRange(possibleShapes.OrderBy(x => rnd.Next()).Take(waveAmount));// get "waveAmount" amount of pieces from the list of possible shapes
             }
         }
-        
+    }
 
+    public void Pause()
+    {
+        PauseButton.interactable = false;
+        Time.timeScale = 0f;
+        PauseWindow.SetActive(true);
+    }
+
+    public void UnPause()
+    {
+        PauseButton.interactable = true;
+        Time.timeScale = 1f;
+        PauseWindow.SetActive(false);
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+    private void UpdValues()
+    {
+        scoreText.text = score.ToString();
+        PauseScoreText.text = score.ToString();
+        wavesText.text = (currWave + 1).ToString() + "/" + maxWave.ToString();
+    }
+
+    public void GameLost()
+    {
+        SceneManager.LoadScene("Game scene");
+        tilemap.ClearAllTiles();
+    }
+
+    public void GameWin()
+    {
+        myGameSettings.score = Math.Max(score, bestScore);
+        myGameSettings.isCompleted = true;
+        string json = JsonUtility.ToJson(myGameSettings, true);
+        File.WriteAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json", json);
+
+        SceneManager.LoadScene("Menu");
+        Debug.Log("Finish the G");
     }
 
     public void SpawnPieceFromList()
     {
-        int pieceNumber = rnd.Next(0, 34);
-
-
-        if (nextPiece >= pieceWaves.Count)
+        if (currWave >= pieceWaves.Count) // No pieces in list
         {
             if (holdPiece >= 0) // If there is a block in the "hold" section
             {
@@ -137,40 +240,42 @@ public class BoardC : MonoBehaviour
             }
             else
             {
-                nextPiece = 0;
+                currWave = 0;
                 GameWin();
             }
         }
         else
         {
-            pieceNumber = pieceWaves[nextPiece];
-            nextPiece++;
+            pieceIndex = pieceWaves[currWave];
+            currWave++;
             changeNext();
 
-            SpawnPiece(pieceNumber);
+            SpawnPiece(pieceIndex);
         }
+
+        UpdValues();
     }
 
-    public void SpawnPiece(int pieceIndex)
+    public void SpawnPiece(int pIndex)
     {
         int shape;
         int variant;
 
-        if (pieceIndex < 10) // O,T,I,V,Y blocks have 2 rotations
+        if (pIndex < 10) // O,T,I,V,Y blocks have 2 rotations
         {
-            shape = pieceIndex / 2;
-            variant = pieceIndex % 2;
+            shape = pIndex / 2;
+            variant = pIndex % 2;
         }
         else // Z,L,S,J,R,P blocks have 2 rotations and 2 mirror variants (4 variants)
         {
-            pieceIndex -= 10; // Getting rid of first 10 indexes (5 shapes with 2 rot)
-            shape = 5 + pieceIndex / 4;
-            variant = pieceIndex % 4;
-            pieceIndex += 10; // Resetting index
+            pIndex -= 10; // Getting rid of first 10 indexes (5 shapes with 2 rot)
+            shape = 5 + pIndex / 4;
+            variant = pIndex % 4;
+            pIndex += 10; // Resetting index
         }
         TetrominoData data = tetrominoes[shape];
 
-        activePiece.Initialize(this, spawnPosition, data, pieceIndex);
+        activePiece.Initialize(this, spawnPosition, data, pIndex);
 
         // Handle start variant:
         activePiece.TestWallKicks(1);
@@ -208,15 +313,15 @@ public class BoardC : MonoBehaviour
 
     private void changeNext()
     {
-        int pieceNumber;
+        int pIndex;
 
-        int maxNextShapes = Mathf.Min(pieceWaves.Count - nextPiece, 4);
+        int maxNextShapes = Mathf.Min(pieceWaves.Count - currWave, 4);
         for (int i = 0; i < 4; i++)
         {
             if (i < maxNextShapes)
             {
-                pieceNumber = pieceWaves[nextPiece + i];
-                nextBlocks[i].sprite = blockSprites[pieceNumber];
+                pIndex = pieceWaves[currWave + i];
+                nextBlocks[i].sprite = blockSprites[pIndex];
             }
             else
             {
@@ -247,19 +352,6 @@ public class BoardC : MonoBehaviour
             holdBlock.sprite = null;
         holdPiece = newHold;
 
-    }
-
-    public void GameLost()
-    {
-        tilemap.ClearAllTiles();
-
-        // Do anything else you want on game over here..
-    }
-
-    public void GameWin()
-    {
-        SceneManager.LoadScene("Menu");
-        Debug.Log("Finish the G");
     }
 
     public void Set(Piece piece)
@@ -392,6 +484,8 @@ public class BoardC : MonoBehaviour
 
     public void ClearLines()
     {
+        int amountOfLinesCleared = 0;
+
         RectInt bounds = Bounds;
         int row = bounds.yMin;
 
@@ -403,11 +497,28 @@ public class BoardC : MonoBehaviour
             if (IsLineFull(row))
             {
                 LineClear(row);
+                amountOfLinesCleared++;
             }
             else
             {
                 row++;
             }
+        }
+
+        switch (amountOfLinesCleared) // update score
+        {
+            case 1:
+                score += 10;
+                break;
+            case 2:
+                score += 30;
+                break;
+            case 3:
+                score += 60;
+                break;
+            case 4:
+                score += 120;
+                break;
         }
     }
 

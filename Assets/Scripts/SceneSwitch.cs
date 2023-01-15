@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
 public class SceneSwitch : MonoBehaviour
@@ -14,6 +11,7 @@ public class SceneSwitch : MonoBehaviour
 
     public void Editor()
     {
+        Debug.Log(Application.streamingAssetsPath);
         SceneManager.LoadScene("User Levels");
     }
 

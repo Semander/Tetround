@@ -74,7 +74,7 @@ public class AddPacketToContent : MonoBehaviour
 
     public void LoadFromJson()
     {
-        string json = File.ReadAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json");
         myGameSettings = JsonUtility.FromJson<GameSettings>(json);
 
         myGameMode = myGameSettings.gameMode;
@@ -112,7 +112,7 @@ public class AddPacketToContent : MonoBehaviour
             myGameSettings.waveList = myWaveList;
 
             string json = JsonUtility.ToJson(myGameSettings, true);
-            File.WriteAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json", json);
+            File.WriteAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json", json);
         }
     }
  }

@@ -29,12 +29,36 @@ public class Piece : MonoBehaviour
 
     private bool isInit = false;
 
+    private bool rotClock45;
+    private bool rotCount45;
+    private bool rotClock90;
+    private bool rotCount90;
+    private bool rotClock180;
+    private bool mirroring;
+    private bool moveRight;
+    private bool moveLeft;
+    private bool moveDown;
+    private bool drop;
+    private bool gravity;
+
     public void Initialize(BoardC board, Vector3Int position, TetrominoData data, int shape)
     {
         center = otherGameObject.GetComponent<Transform>();
         this.data = data;
         this.board = board;
         this.position = position;
+
+        rotClock45 = board.rotClock45;
+        rotCount45 = board.rotCount45;
+        rotClock90 = board.rotClock90;
+        rotCount90 = board.rotCount90;
+        rotClock180 = board.rotClock180;
+        mirroring = board.mirroring;
+        moveRight = board.moveRight;
+        moveLeft = board.moveLeft;
+        moveDown = board.moveDown;
+        drop = board.drop;
+        gravity = board.gravity;
 
         MoveCenterPos();
 
@@ -78,33 +102,33 @@ public class Piece : MonoBehaviour
                 holdPossible = false;
             }
 
-            if (Input.GetKeyDown(KeyCode.Z)) // Handle 45 degree rotation
+            if (rotCount45 && Input.GetKeyDown(KeyCode.Z)) // Handle 45 degree rotation
             {
                 Rotate45(-1);
             }
-            else if (Input.GetKeyDown(KeyCode.X))
+            else if (rotClock45 && Input.GetKeyDown(KeyCode.X))
             {
                 Rotate45(1);
             }
-            else if (Input.GetKeyDown(KeyCode.C)) // Handle 90 degree rotation
+            else if (rotCount90 && Input.GetKeyDown(KeyCode.C)) // Handle 90 degree rotation
             {
                 Rotate(-1);
             }
-            else if (Input.GetKeyDown(KeyCode.V))
+            else if (rotClock90 && Input.GetKeyDown(KeyCode.V))
             {
                 Rotate(1);
             }
-            else if (Input.GetKeyDown(KeyCode.B)) // Handle 180 degree rotation
+            else if (rotClock180 && Input.GetKeyDown(KeyCode.B)) // Handle 180 degree rotation
             {
                 Rotate180();
             }
-            if (Input.GetKeyDown(KeyCode.UpArrow)) // Handle mirror reflection
+            if (mirroring && Input.GetKeyDown(KeyCode.UpArrow)) // Handle mirror reflection
             {
                 Mirror();
             }
 
             // Handle hard drop
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (drop && Input.GetKeyDown(KeyCode.Space))
             {
                 HardDrop();
             }
@@ -117,20 +141,20 @@ public class Piece : MonoBehaviour
             }
 
             // Advance the piece to the next row every x seconds
-            if (Time.time > stepTime)
+            if (gravity && Time.time > stepTime)
             {
                 Step();
             }
 
             board.Set(this);
         }
-        else { Debug.Log("Oh no///"); }
+        else { Debug.Log("Piece not Initialized..."); }
     }
 
     private void HandleMoveInputs()
     {
         // Soft drop movement
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (moveDown && Input.GetKey(KeyCode.DownArrow))
         {
             if (Move(Vector2Int.down))
             {
@@ -141,7 +165,7 @@ public class Piece : MonoBehaviour
         }
 
         // Left/right movement
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (moveLeft && Input.GetKey(KeyCode.LeftArrow))
         {
             if (!Move(Vector2Int.left))
             {
@@ -151,7 +175,7 @@ public class Piece : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (moveRight && Input.GetKey(KeyCode.RightArrow))
         {
             if (!Move(Vector2Int.right))
             {

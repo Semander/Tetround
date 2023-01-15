@@ -1,5 +1,5 @@
 {
-    "isCompleted": false,
+    "isCompleted": true,
     "score": 0,
     "gameMode": {
         "rotClock45": true,
@@ -16,12 +16,16 @@
     },
     "waveList": [
         {
-            "waveAmount": 0,
-            "shapes": 0
+            "waveAmount": 1,
+            "shapes": 1
         },
         {
-            "waveAmount": 10,
+            "waveAmount": 1,
             "shapes": 4
+        },
+        {
+            "waveAmount": 5,
+            "shapes": 87061
         }
     ]
 }

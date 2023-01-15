@@ -1,0 +1,19 @@
+{
+    "official": [
+        {
+            "name": "level 0",
+            "isCompleted": false
+        },
+        {
+            "name": "level 1",
+            "isCompleted": false
+        }
+    ],
+    "user": [
+        {
+            "id": 2,
+            "name": "DemoLvl",
+            "isCompleted": false
+        }
+    ]
+}

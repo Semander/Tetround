@@ -80,13 +80,13 @@ public class JsonReadWriteSystem : MonoBehaviour
 
 
         string json = JsonUtility.ToJson(myGameMode, true);
-        //File.WriteAllText(Application.dataPath + "/SaveData/Level 0.json", json);
+        //File.WriteAllText(Application.streamingAssetsPath + "/SaveData/Level 0.json", json);
     }
 
 
     public GameMode LoadFromJson()
     {
-        string json = File.ReadAllText(Application.dataPath + "/SaveData/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json");
 
         GameMode myGameMode = JsonUtility.FromJson<GameMode>(json);
 

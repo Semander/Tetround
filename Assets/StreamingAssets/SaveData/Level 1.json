@@ -2,22 +2,22 @@
     "isCompleted": true,
     "score": 200,
     "gameMode": {
-        "rotClock45": true,
-        "rotCount45": true,
+        "rotClock45": false,
+        "rotCount45": false,
         "rotClock90": true,
-        "rotCount90": true,
-        "rotClock180": true,
-        "mirroring": true,
+        "rotCount90": false,
+        "rotClock180": false,
+        "mirroring": false,
         "moveRight": true,
-        "moveLeft": true,
+        "moveLeft": false,
         "moveDown": true,
         "drop": true,
         "gravity": true
     },
     "waveList": [
         {
-            "waveAmount": 3,
-            "shapes": 3
+            "waveAmount": 1000,
+            "shapes": 1000
         },
         {
             "waveAmount": 1,
