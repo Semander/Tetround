@@ -27,10 +27,16 @@ public class RandPacket : MonoBehaviour
         try
         {
             waveAmount = int.Parse(waveAmountString);
+
+            if (waveAmount < 0)
+            {
+                input.text = "0";
+                waveAmount = 0;
+            }
         }
         catch (FormatException)
         {
-            input.text = "";
+            input.text = "0";
             waveAmount = 0;
         }
         parentScript.UpdCurrWave();
@@ -58,7 +64,7 @@ public class RandPacket : MonoBehaviour
     public void UpdId(int id)
     {
         Ident = id;
-        ID.text = id.ToString();
+        ID.text = (Ident + 1).ToString();
     }
 
     public Wave UpdBits()

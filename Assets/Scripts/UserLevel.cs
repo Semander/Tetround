@@ -9,8 +9,8 @@ using UnityEngine.UI;
 
 public class UserLevel : MonoBehaviour
 {
-    int SaveID;
-    string levelName;
+    public int SaveID;
+    public string levelName;
     bool isCompleted;
     User user = new User();
 
@@ -24,18 +24,20 @@ public class UserLevel : MonoBehaviour
     private void Start()
     {
         Completion.enabled = false;
-        nameInput.onEndEdit.AddListener(UpdWaveAmount);
+        nameInput.onEndEdit.AddListener(UpdName);
     }
 
-    public void UpdWaveAmount(string waveAmountString)
+    public void UpdName(string name)
     {
-        levelName = waveAmountString;
+        levelName = name;
+        parentScript.UpdateName(id);
+        parentScript.LoadToJson();
     }
 
     public void UpdId(int ident)
     {
         id = ident;
-        idText.text = ident.ToString();
+        idText.text = (id + 1).ToString();
     }
 
     public void UpdLevelName(string inpText)
@@ -62,7 +64,7 @@ public class UserLevel : MonoBehaviour
         user.name = levelName;
         user.isCompleted = isCompleted;
 
-        Debug.Log("name: " + levelName);
+        Debug.Log("id: " + SaveID);
 
         return user;
     }

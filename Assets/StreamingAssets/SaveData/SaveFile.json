@@ -1,17 +1,29 @@
 {
     "official": [
         {
-            "name": "level 0",
+            "name": "Tetris",
             "isCompleted": false
         },
         {
-            "name": "level 1",
+            "name": "Free flight",
+            "isCompleted": false
+        },
+        {
+            "name": "New shapes",
+            "isCompleted": false
+        },
+        {
+            "name": "Fixed issue",
+            "isCompleted": false
+        },
+        {
+            "name": "Demon",
             "isCompleted": false
         }
     ],
     "user": [
         {
-            "id": 2,
+            "id": 0,
             "name": "DemoLvl",
             "isCompleted": false
         }

@@ -24,7 +24,6 @@ public class GameMode
     public bool moveRight;
     public bool moveLeft;
     public bool moveDown;
-    public bool drop;
     public bool gravity;
 }
 
@@ -75,18 +74,17 @@ public class JsonReadWriteSystem : MonoBehaviour
         myGameMode.moveRight = true;
         myGameMode.moveLeft = true;
         myGameMode.moveDown = true;
-        myGameMode.drop = true;
         myGameMode.gravity = true;
 
 
         string json = JsonUtility.ToJson(myGameMode, true);
-        //File.WriteAllText(Application.streamingAssetsPath + "/SaveData/Level 0.json", json);
+        //File.WriteAllText(Application.persistentDataPath + "/SaveData/Level 0.json", json);
     }
 
 
     public GameMode LoadFromJson()
     {
-        string json = File.ReadAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.persistentDataPath + "/SaveData/" + FileNameController.filePath + ".json");
 
         GameMode myGameMode = JsonUtility.FromJson<GameMode>(json);
 

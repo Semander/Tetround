@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,7 +29,6 @@ public class HandleUserLvls : MonoBehaviour
     void Start()
     {
         LoadFromJson();
-        Debug.Log("Yaay");
     }
 
     public void BackToMenu()
@@ -52,16 +53,27 @@ public class HandleUserLvls : MonoBehaviour
         ULevelList.Add(ULevel);
 
         userLevel = ULevel.GetComponent<UserLevel>();
-        int Id = 0;
-        while (idList.Contains(Id))
+
+        int SaveID = 0;
+        Debug.Log("Contains " + SaveID + ": " + idList.Contains(SaveID));
+        while (idList.Contains(SaveID))// find free index
         {
-            Id++;
-            if (Id >= 1000) break;
+            SaveID++;
+
+            if (SaveID >= 1000) {
+                Debug.Log("Inf loop??");
+                break; 
+            }
 
         }
-        idList.Add(Id);
+        idList.Add(SaveID);
 
-        userLevel.id = Id;
+        foreach(int ident in idList)
+        {
+            Debug.Log("All id in list" + ident);
+        }
+
+        userLevel.id = SaveID;
         userLevel.parentScript = this;
         userLevelList.Add(userLevel);
         UpdAllValues();
@@ -77,49 +89,55 @@ public class HandleUserLvls : MonoBehaviour
         myGameMode.moveRight = true;
         myGameMode.moveLeft = true;
         myGameMode.moveDown = true;
-        myGameMode.drop = true;
         myGameMode.gravity = true;
 
         myGameSettings.gameMode = myGameMode;
 
         string json = JsonUtility.ToJson(myGameSettings, true);
-        File.WriteAllText(Application.streamingAssetsPath + "/SaveData/" + Id.ToString() + ".json", json);
+        File.WriteAllText(Application.persistentDataPath + "/SaveData/" + SaveID.ToString() + ".json", json);
 
         myUser = new User();
-        myUser.id = Id;
+        myUser.id = SaveID;
         myUser.name = "";
         myUser.isCompleted = false;
+
+        Debug.Log("User object: " + myUser.id);
 
         myUserList.Add(myUser);
         myLevelSave.user = myUserList;
 
+
         json = JsonUtility.ToJson(myLevelSave, true);
-        File.WriteAllText(Application.streamingAssetsPath + "/SaveData/SaveFile.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/SaveData/SaveFile.json", json);
     }
 
     public void DeleteLevel(int Id)
     {
+        int SaveID = userLevelList[Id].SaveID;
+
         ULevel = ULevelList[Id];
         ULevelList.RemoveAt(Id);
         userLevelList.RemoveAt(Id);
+        myUserList.RemoveAt(Id);
+        idList.RemoveAt(Id);
         Destroy(ULevel);
 
         UpdAllValues();
 
-        File.Delete(Application.streamingAssetsPath + "/SaveData/" + Id.ToString() + ".json");
+        File.Delete(Application.persistentDataPath + "/SaveData/" + SaveID.ToString() + ".json");
         LoadToJson();
     }
 
     public void LoadFromJson()
     {
-        string json = File.ReadAllText(Application.streamingAssetsPath + "/SaveData/SaveFile.json");
+        string json = File.ReadAllText(Application.persistentDataPath + "/SaveData/SaveFile.json");
         myLevelSave = JsonUtility.FromJson<LevelSave>(json);
 
         myUserList = myLevelSave.user;
 
-        for (int j = 0; j < myUserList.Count; j++)
+        foreach (User user in myUserList)
         {
-            myUser = myUserList[j];
+            Debug.Log("Oh no..." + user.id);
 
             ULevel = Instantiate(Resources.Load("LevelByUser")) as GameObject;
             ULevel.transform.SetParent(transform, false);
@@ -130,27 +148,25 @@ public class HandleUserLvls : MonoBehaviour
             userLevel = ULevel.GetComponent<UserLevel>();
             userLevel.parentScript = this;
             userLevelList.Add(userLevel);
-            UpdAllValues();
 
-            Debug.Log("Oh no..." + userLevel.id);
-            idList.Add(myUser.id);
+            idList.Add(user.id);
 
-            userLevel.setLevelData(myUser);
+            userLevel.setLevelData(user);
         }
+        UpdAllValues();
+    }
+
+    public void UpdateName(int Id)
+    {
+        myUserList[Id].name = userLevelList[Id].levelName;
+        Debug.Log(myUserList[Id].ToString());
     }
 
     public void LoadToJson()
     {
-        myUserList.Clear();
-        for (int i = 0; i < userLevelList.Count; i++)
-        {
-            myUserList.Add(userLevelList[i].saveData()); // update all needed data and pass the User object
+        myLevelSave.user = myUserList;
 
-
-            myLevelSave.user = myUserList;
-
-            string json = JsonUtility.ToJson(myLevelSave, true);
-            File.WriteAllText(Application.streamingAssetsPath + "/SaveData/SaveFile.json", json);
-        }
+        string json = JsonUtility.ToJson(myLevelSave, true);
+        File.WriteAllText(Application.persistentDataPath + "/SaveData/SaveFile.json", json);
     }
 }

@@ -38,7 +38,6 @@ public class Piece : MonoBehaviour
     private bool moveRight;
     private bool moveLeft;
     private bool moveDown;
-    private bool drop;
     private bool gravity;
 
     public void Initialize(BoardC board, Vector3Int position, TetrominoData data, int shape)
@@ -57,7 +56,6 @@ public class Piece : MonoBehaviour
         moveRight = board.moveRight;
         moveLeft = board.moveLeft;
         moveDown = board.moveDown;
-        drop = board.drop;
         gravity = board.gravity;
 
         MoveCenterPos();
@@ -128,7 +126,7 @@ public class Piece : MonoBehaviour
             }
 
             // Handle hard drop
-            if (drop && Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 HardDrop();
             }

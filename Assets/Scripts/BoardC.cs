@@ -64,7 +64,6 @@ public class BoardC : MonoBehaviour
     public bool moveRight;
     public bool moveLeft;
     public bool moveDown;
-    public bool drop;
     public bool gravity;
 
     public GameObject Co45;
@@ -76,7 +75,6 @@ public class BoardC : MonoBehaviour
     public GameObject Movr;
     public GameObject Movl;
     public GameObject Movd;
-    public GameObject Drop;
 
     public GameObject PauseWindow;
 
@@ -110,10 +108,11 @@ public class BoardC : MonoBehaviour
     int i = 0;
     private void addPieceWaves()
     {
-        string json = File.ReadAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json");
+        string json = File.ReadAllText(Application.persistentDataPath + "/SaveData/" + FileNameController.filePath + ".json");
         myGameSettings = JsonUtility.FromJson<GameSettings>(json);
 
         Debug.Log(FileNameController.filePath);
+        Debug.Log(Application.persistentDataPath + "/SaveData/");
 
 
         myGameMode = myGameSettings.gameMode;
@@ -128,7 +127,6 @@ public class BoardC : MonoBehaviour
         moveRight = myGameMode.moveRight;
         moveLeft = myGameMode.moveLeft;
         moveDown = myGameMode.moveDown;
-        drop = myGameMode.drop;
         gravity = myGameMode.gravity;
 
         Co45.SetActive(rotClock45); 
@@ -140,7 +138,6 @@ public class BoardC : MonoBehaviour
         Movr.SetActive(moveRight); 
         Movl.SetActive(moveLeft); 
         Movd.SetActive(moveDown); 
-        Drop.SetActive(drop);
 
         bestScore = myGameSettings.score;
         PauseBestScoreText.text = bestScore.ToString();
@@ -203,13 +200,14 @@ public class BoardC : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene("Menu");
+        Time.timeScale = 1f;
     }
 
     private void UpdValues()
     {
         scoreText.text = score.ToString();
         PauseScoreText.text = score.ToString();
-        wavesText.text = (currWave + 1).ToString() + "/" + maxWave.ToString();
+        wavesText.text = currWave.ToString() + "/" + maxWave.ToString();
     }
 
     public void GameLost()
@@ -223,7 +221,7 @@ public class BoardC : MonoBehaviour
         myGameSettings.score = Math.Max(score, bestScore);
         myGameSettings.isCompleted = true;
         string json = JsonUtility.ToJson(myGameSettings, true);
-        File.WriteAllText(Application.streamingAssetsPath + "/SaveData/" + FileNameController.filePath + ".json", json);
+        File.WriteAllText(Application.persistentDataPath + "/SaveData/" + FileNameController.filePath + ".json", json);
 
         SceneManager.LoadScene("Menu");
         Debug.Log("Finish the G");

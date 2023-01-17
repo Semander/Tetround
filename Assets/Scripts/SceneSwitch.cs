@@ -1,12 +1,30 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneSwitch : MonoBehaviour
 {
     // Start is called before the first frame update
+    private void Start()
+    {
+        Debug.Log(Application.persistentDataPath + "/SaveData");
+
+        string targetDir = Application.persistentDataPath + "/SaveData";
+        if (!Directory.Exists(targetDir))
+        {
+            string source = Application.streamingAssetsPath + "/SaveData";
+
+            Directory.CreateDirectory(targetDir);
+            foreach(var file in Directory.GetFiles(source))
+            {
+                File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)));
+            }
+        }
+    }
+
     public void PlayGame()
     {
-        SceneManager.LoadScene("Game Scene");
+        SceneManager.LoadScene("Official Levels");
     }
 
     public void Editor()

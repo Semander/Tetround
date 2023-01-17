@@ -1,6 +1,6 @@
 {
-    "isCompleted": false,
-    "score": 0,
+    "isCompleted": true,
+    "score": 120,
     "gameMode": {
         "rotClock45": true,
         "rotCount45": true,
@@ -11,13 +11,12 @@
         "moveRight": true,
         "moveLeft": true,
         "moveDown": true,
-        "drop": true,
-        "gravity": true
+        "gravity": false
     },
     "waveList": [
         {
-            "waveAmount": 0,
-            "shapes": 256
+            "waveAmount": 100,
+            "shapes": 17179869183
         }
     ]
 }
