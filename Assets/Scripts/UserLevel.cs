@@ -21,7 +21,7 @@ public class UserLevel : MonoBehaviour
 
     [NonSerialized] public HandleUserLvls parentScript;
 
-    private void Start()
+    private void Awake()
     {
         Completion.enabled = false;
         nameInput.onEndEdit.AddListener(UpdName);
@@ -56,6 +56,7 @@ public class UserLevel : MonoBehaviour
 
         nameInput.text = levelName;
         Completion.enabled = isCompleted;
+        Debug.Log("Is level completed: " + isCompleted.ToString());
     }
 
     public User saveData()

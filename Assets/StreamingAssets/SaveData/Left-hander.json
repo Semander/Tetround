@@ -1,14 +1,14 @@
 {
-    "isCompleted": true,
-    "score": 580,
+    "isCompleted": false,
+    "score": 0,
     "gameMode": {
-        "rotClock45": true,
+        "rotClock45": false,
         "rotCount45": true,
-        "rotClock90": true,
+        "rotClock90": false,
         "rotCount90": true,
         "rotClock180": true,
         "mirroring": true,
-        "moveRight": true,
+        "moveRight": false,
         "moveLeft": true,
         "moveDown": true,
         "gravity": false
@@ -20,26 +20,22 @@
         },
         {
             "waveAmount": 7,
-            "shapes": 174122
+            "shapes": 87061
+        },
+        {
+            "waveAmount": 7,
+            "shapes": 87061
         },
         {
             "waveAmount": 10,
-            "shapes": 5726536000
+            "shapes": 5726623061
         },
         {
             "waveAmount": 10,
-            "shapes": 11453072000
+            "shapes": 5726623061
         },
         {
-            "waveAmount": 17,
-            "shapes": 11453246122
-        },
-        {
-            "waveAmount": 17,
-            "shapes": 11453246122
-        },
-        {
-            "waveAmount": 34,
+            "waveAmount": 68,
             "shapes": 17179869183
         }
     ]

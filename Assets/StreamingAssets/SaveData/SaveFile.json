@@ -5,26 +5,91 @@
             "isCompleted": false
         },
         {
+            "name": "New Shapes",
+            "isCompleted": false
+        },
+        {
+            "name": "Half-turn",
+            "isCompleted": false
+        },
+        {
             "name": "Free flight",
             "isCompleted": false
         },
         {
-            "name": "New shapes",
+            "name": "Left-hander",
             "isCompleted": false
         },
         {
-            "name": "Fixed issue",
+            "name": "Tetris Long",
             "isCompleted": false
         },
         {
-            "name": "Demon",
+            "name": "New Shapes Long",
+            "isCompleted": false
+        },
+        {
+            "name": "Half-turn Long",
+            "isCompleted": false
+        },
+        {
+            "name": "Free flight Long",
+            "isCompleted": false
+        },
+        {
+            "name": "Left-hander Long",
             "isCompleted": false
         }
     ],
     "user": [
         {
             "id": 0,
-            "name": "DemoLvl",
+            "name": "Tetris",
+            "isCompleted": false
+        },
+        {
+            "id": 1,
+            "name": "New Shapes",
+            "isCompleted": false
+        },
+        {
+            "id": 2,
+            "name": "Half-turn",
+            "isCompleted": false
+        },
+        {
+            "id": 3,
+            "name": "Free flight",
+            "isCompleted": false
+        },
+        {
+            "id": 4,
+            "name": "Left-hander",
+            "isCompleted": false
+        },
+        {
+            "id": 5,
+            "name": "Tetris Long",
+            "isCompleted": false
+        },
+        {
+            "id": 6,
+            "name": "New Shapes Long",
+            "isCompleted": false
+        },
+        {
+            "id": 7,
+            "name": "Half-turn Long",
+            "isCompleted": false
+        },
+        {
+            "id": 8,
+            "name": "Free flight Long",
+            "isCompleted": false
+        },
+        {
+            "id": 9,
+            "name": "Left-hander Long",
             "isCompleted": false
         }
     ]

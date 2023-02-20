@@ -73,7 +73,7 @@ public class HandleUserLvls : MonoBehaviour
             Debug.Log("All id in list" + ident);
         }
 
-        userLevel.id = SaveID;
+        userLevel.SaveID = SaveID;
         userLevel.parentScript = this;
         userLevelList.Add(userLevel);
         UpdAllValues();

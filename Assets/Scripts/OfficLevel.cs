@@ -19,7 +19,7 @@ public class OfficLevel : MonoBehaviour
 
     [NonSerialized] public HandleOfficLvls parentScript;
 
-    private void Start()
+    private void Awake()
     {
         Completion.enabled = false;
     }

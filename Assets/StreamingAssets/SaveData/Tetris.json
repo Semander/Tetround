@@ -1,6 +1,6 @@
 {
     "isCompleted": true,
-    "score": 180,
+    "score": 430,
     "gameMode": {
         "rotClock45": false,
         "rotCount45": false,
@@ -23,8 +23,24 @@
             "shapes": 16
         },
         {
-            "waveAmount": 5,
-            "shapes": 87044
+            "waveAmount": 2,
+            "shapes": 16384
+        },
+        {
+            "waveAmount": 2,
+            "shapes": 65536
+        },
+        {
+            "waveAmount": 1,
+            "shapes": 1
+        },
+        {
+            "waveAmount": 12,
+            "shapes": 87060
+        },
+        {
+            "waveAmount": 10,
+            "shapes": 81941
         },
         {
             "waveAmount": 14,

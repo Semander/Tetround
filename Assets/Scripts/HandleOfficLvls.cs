@@ -59,8 +59,6 @@ public class HandleOfficLvls : MonoBehaviour
             officLevel.parentScript = this;
             officLevelList.Add(officLevel);
 
-            Debug.Log("Oh no..." + officLevel.id);
-
             officLevel.setLevelData(myOfficial);
         }
         UpdAllValues();

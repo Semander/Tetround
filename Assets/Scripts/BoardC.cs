@@ -28,6 +28,15 @@ public class BoardC : MonoBehaviour
     public List<Wave> myWaveList = new List<Wave>();
     public Wave myWave = new Wave();
 
+    public LevelSave myLevelSave = new LevelSave();
+    public List<Official> myOfficialList = new List<Official>();
+    public Official myOfficial = new Official();
+    public List<User> myUserList = new List<User>();
+    public User myUser = new User();
+    public bool isOfficial = false;
+    public string fileName;
+    public int index;
+
     public TMP_Text scoreText;
     public TMP_Text wavesText;
 
@@ -105,14 +114,54 @@ public class BoardC : MonoBehaviour
     }
 
 
-    int i = 0;
     private void addPieceWaves()
     {
-        string json = File.ReadAllText(Application.persistentDataPath + "/SaveData/" + FileNameController.filePath + ".json");
+        fileName = FileNameController.filePath;
+        bool fileFound = false;
+
+        string json = File.ReadAllText(Application.persistentDataPath + "/SaveData/SaveFile.json");
+        myLevelSave = JsonUtility.FromJson<LevelSave>(json);
+
+        index = 0;
+        myOfficialList = myLevelSave.official;
+        Debug.Log("is null: " + (myOfficialList == null).ToString());
+        foreach (Official official in myOfficialList)
+        {
+            if (official.name == fileName) //if this is the file we need to then change
+            { 
+                myOfficial = official; 
+                isOfficial = true;
+                fileFound = true;
+                break;
+            }
+            index++;
+        }
+        if (!fileFound)
+        {
+            myUserList = myLevelSave.user;
+            Debug.Log(myUserList.Count());
+            for (index = 0; index< myUserList.Count(); index++)
+            {
+                Debug.Log("Trying number: " + fileName + " with: " + myUserList[index].id.ToString());
+                if (myUserList[index].id.ToString() == fileName)
+                {
+                    myUser = myUserList[index];
+                    isOfficial = false;
+                    fileFound = true;
+                    break;
+                }
+            }
+        }
+        if (!fileFound)
+        {
+            Debug.Log("Didn't find corresponding file. Not Sure why this can happen");
+            Debug.Log("File: " + fileName);
+        }
+
+        json = File.ReadAllText(Application.persistentDataPath + "/SaveData/" + fileName + ".json");
         myGameSettings = JsonUtility.FromJson<GameSettings>(json);
 
-        Debug.Log(FileNameController.filePath);
-        Debug.Log(Application.persistentDataPath + "/SaveData/");
+        Debug.Log("Path to the save file: " + Application.persistentDataPath + "/SaveData/");
 
 
         myGameMode = myGameSettings.gameMode;
@@ -129,10 +178,10 @@ public class BoardC : MonoBehaviour
         moveDown = myGameMode.moveDown;
         gravity = myGameMode.gravity;
 
-        Co45.SetActive(rotClock45); 
-        Cl45.SetActive(rotCount45); 
-        Co90.SetActive(rotClock90); 
-        Cl90.SetActive(rotCount90); 
+        Cl45.SetActive(rotClock45); 
+        Co45.SetActive(rotCount45); 
+        Cl90.SetActive(rotClock90); 
+        Co90.SetActive(rotCount90); 
         R180.SetActive(rotClock180); 
         Mirr.SetActive(mirroring); 
         Movr.SetActive(moveRight); 
@@ -160,7 +209,7 @@ public class BoardC : MonoBehaviour
                 //Debug.Log("Wave amount: " + waveAmount + ", number: " + number);
 
 
-                for (i = 0; number > 0; number >>= 1)// parse into bits positions
+                for (int i = 0; number > 0; number >>= 1)// parse into bits positions
                 {
                     if (number % 2 == 1)
                     {
@@ -174,12 +223,20 @@ public class BoardC : MonoBehaviour
 
                 int repeatPacket = (waveAmount + amountOfShapesInPacket - 1) / amountOfShapesInPacket;
 
-                for (i = 0; i < repeatPacket; i++) // repeat packet if amount of waves is more than shapes in the packet
+                for (int i = 0; i < repeatPacket; i++) // repeat packet if amount of waves is more than shapes in the packet
                 {
                     possibleShapes.AddRange(PossibleShapesPackets);
                 }
                 pieceWaves.AddRange(possibleShapes.OrderBy(x => rnd.Next()).Take(waveAmount));// get "waveAmount" amount of pieces from the list of possible shapes
             }
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            Pause();
         }
     }
 
@@ -220,7 +277,25 @@ public class BoardC : MonoBehaviour
     {
         myGameSettings.score = Math.Max(score, bestScore);
         myGameSettings.isCompleted = true;
-        string json = JsonUtility.ToJson(myGameSettings, true);
+
+        if (isOfficial)
+        {
+            myOfficialList[index].isCompleted = true;
+            myLevelSave.official = myOfficialList;
+        }
+        else
+        {
+            myUserList[index].isCompleted = true;
+            myLevelSave.user = myUserList;
+        }
+
+        Debug.Log("level number: " + index.ToString());
+
+        string json = JsonUtility.ToJson(myLevelSave, true);
+        File.WriteAllText(Application.persistentDataPath + "/SaveData/SaveFile.json", json);
+
+
+        json = JsonUtility.ToJson(myGameSettings, true);
         File.WriteAllText(Application.persistentDataPath + "/SaveData/" + FileNameController.filePath + ".json", json);
 
         SceneManager.LoadScene("Menu");
